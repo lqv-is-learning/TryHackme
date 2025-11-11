@@ -1,3 +1,3 @@
 # TryHackme
 
-This page is about the ctf exercises I have solved
+This page is about the CTF exercises I have solved
