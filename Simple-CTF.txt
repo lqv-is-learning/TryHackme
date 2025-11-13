@@ -21,7 +21,6 @@ Nmap done: 1 IP address (1 host up) scanned in 35.12 seconds
 
 2. What is running on the higher port?
 => ssh
-
 ========================================================================================================
 Step 2:Using nmap -sV -sC -Pn -oA nmap_basic 10.201.0.111
 
@@ -216,7 +215,6 @@ hashcat -O -a 0 -m 20 0c01f4468bd75d7a84c7eb73846e8d96:1dac0d92e9fa6bb2 /usr/sha
 
 6. Where can you login with the details obtained?
 => ssh
-
 ==================================================================================================================================================================================
 Step 10: ┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
 └─$ ssh mitch@10.201.115.46 -p 2222           
