@@ -1,4 +1,4 @@
-=======================================================================================================
+======================================================================================================
 Step 1: Using nmap -sV 10.201.0.111        
 └─$ nmap -sV 10.201.0.111                    
 Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-11 21:07 +07
@@ -15,7 +15,7 @@ Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 35.12 seconds
-========================================================================================================
+=======================================================================================================
 1. How many services are running under port 1000?
 => 2
 
